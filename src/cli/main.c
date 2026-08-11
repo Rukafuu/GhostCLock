@@ -312,6 +312,7 @@ int main(int argc, char **argv)
     int exit_code = 0;
     bool session_initialized = false;
     bool process_open = false;
+    bool console_handler_installed = false;
 
     memset(&process, 0, sizeof(process));
     memset(&error, 0, sizeof(error));
@@ -359,6 +360,14 @@ int main(int argc, char **argv)
         return 4;
     }
     process_open = true;
+
+    if (!SetConsoleCtrlHandler(gc_console_handler, TRUE)) {
+        fprintf(stderr, "[ERROR] SetConsoleCtrlHandler failed: Win32 error %lu\n",
+                (unsigned long)GetLastError());
+        exit_code = 4;
+        goto cleanup;
+    }
+    console_handler_installed = true;
 
     if (!gc_collect_baseline(&process, &baseline, &original_priority, &baseline_cpu, &error)) {
         if (error.code != 0) {
@@ -422,6 +431,13 @@ int main(int argc, char **argv)
             goto cleanup;
         }
 
+        if (InterlockedCompareExchange(&gc_stop_requested, 0, 0) != 0) {
+            printf("[INFO] stop requested before changes were applied\n");
+            gc_session_complete(&session);
+            gc_print_session_report(&session);
+            goto cleanup;
+        }
+
         if (session.priority_change_planned) {
             if (!gc_win32_set_priority(&process, planned_priority, &error)) {
                 fprintf(stderr, "[ERROR] %s\n", gc_win32_error_text(&error));
@@ -439,17 +455,6 @@ int main(int argc, char **argv)
     if (gc_session_start(&session) != GC_OK) {
         fprintf(stderr, "[FATAL] session start failed\n");
         exit_code = 4;
-        goto cleanup;
-    }
-
-    if (!SetConsoleCtrlHandler(gc_console_handler, TRUE)) {
-        fprintf(stderr, "[ERROR] SetConsoleCtrlHandler failed: Win32 error %lu\n",
-                (unsigned long)GetLastError());
-        exit_code = gc_restore_if_needed(&session, &process, &error);
-        if (exit_code == 0) {
-            gc_session_fail(&session);
-            exit_code = 4;
-        }
         goto cleanup;
     }
 
@@ -473,8 +478,6 @@ int main(int argc, char **argv)
         }
     }
 
-    SetConsoleCtrlHandler(gc_console_handler, FALSE);
-
     if (exit_code == 0 && session.state != GC_SESSION_FAILED) {
         if (gc_session_complete(&session) != GC_OK) {
             fprintf(stderr, "[FATAL] session completion failed rollback=%s\n",
@@ -495,6 +498,9 @@ cleanup:
     }
     if (process_open) {
         gc_win32_close_process(&process);
+    }
+    if (console_handler_installed) {
+        SetConsoleCtrlHandler(gc_console_handler, FALSE);
     }
     return exit_code;
 }
