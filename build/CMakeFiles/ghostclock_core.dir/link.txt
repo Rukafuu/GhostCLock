@@ -1,0 +1,2 @@
+/usr/bin/ar qc libghostclock_core.a CMakeFiles/ghostclock_core.dir/src/core/core.c.o CMakeFiles/ghostclock_core.dir/src/core/profile.c.o
+/usr/bin/ranlib libghostclock_core.a

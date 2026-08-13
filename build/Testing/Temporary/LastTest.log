@@ -1,0 +1,19 @@
+Start testing: Aug 13 17:10 UTC
+----------------------------------------------------------
+1/1 Testing: ghostclock_core_tests
+1/1 Test: ghostclock_core_tests
+Command: "/workspace/build/ghostclock_tests"
+Directory: /workspace/build
+"ghostclock_core_tests" start time: Aug 13 17:10 UTC
+Output:
+----------------------------------------------------------
+All core tests passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"ghostclock_core_tests" end time: Aug 13 17:10 UTC
+"ghostclock_core_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 13 17:10 UTC
