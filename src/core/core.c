@@ -4,40 +4,26 @@
 
 static bool gc_copy_string(char *destination, size_t capacity, const char *source)
 {
-    size_t length;
+    size_t index;
 
     if (destination == NULL || source == NULL || capacity == 0) {
         return false;
     }
 
-    length = strlen(source);
-    if (length >= capacity) {
-        return false;
+    for (index = 0; index < capacity - 1; ++index) {
+        destination[index] = source[index];
+        if (source[index] == '\0') {
+            return true;
+        }
     }
 
-    memcpy(destination, source, length + 1);
-    return true;
+    destination[capacity - 1] = '\0';
+    return source[index] == '\0';
 }
 
 static int gc_priority_rank(gc_priority priority)
 {
-    switch (priority) {
-    case GC_PRIORITY_IDLE:
-        return 1;
-    case GC_PRIORITY_BELOW_NORMAL:
-        return 2;
-    case GC_PRIORITY_NORMAL:
-        return 3;
-    case GC_PRIORITY_ABOVE_NORMAL:
-        return 4;
-    case GC_PRIORITY_HIGH:
-        return 5;
-    case GC_PRIORITY_REALTIME:
-        return 6;
-    case GC_PRIORITY_UNKNOWN:
-    default:
-        return 0;
-    }
+    return (int)priority;
 }
 
 const char *gc_result_name(gc_result result)
