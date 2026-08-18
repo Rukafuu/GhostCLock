@@ -1,1 +1,11 @@
-(src/core/core.c)
+```
+# Build artifacts
+build/
+CMakeFiles/
+*.cmake
+*.dir/
+Makefile
+CTestCostData.txt
+LastTest.log
+Testing/
+```

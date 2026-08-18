@@ -1,2 +1,2 @@
-ghostclock_core_tests 1 0.00136524
+ghostclock_core_tests 4 0.000212956
 ---
