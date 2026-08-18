@@ -1,11 +1,11 @@
 ```
 # Build artifacts
 build/
+CMakeCache.txt
 CMakeFiles/
-*.cmake
-*.dir/
-Makefile
-CTestCostData.txt
-LastTest.log
+DartConfiguration.tcl
 Testing/
+
+# Logs
+*.log
 ```
