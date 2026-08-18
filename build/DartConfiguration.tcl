@@ -11,7 +11,7 @@ BuildDirectory: /workspace/build
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: c-6a7dfa72-012899c3-74f6800f055d
+Site: c-6a83a497-012899c3-14cf7c50d8b3
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
 BuildName: Linux-cc
