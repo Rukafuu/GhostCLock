@@ -1,11 +1,4 @@
 ```
-# Build artifacts
-build/
-CMakeCache.txt
-CMakeFiles/
-DartConfiguration.tcl
-Testing/
-
-# Logs
-*.log
+# Git attributes
+.gitattributes
 ```
